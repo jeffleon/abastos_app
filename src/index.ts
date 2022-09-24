@@ -7,13 +7,19 @@ import Container from 'typedi';
 import * as bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 dotenv.config();
-import { ENV_CONFIG } from './config';
+import { ENV_CONFIG } from './config/app/config';
+import AppDataSource from './config/db/config';
 
 const App: Express = express();
 const baseDir = __dirname;
 
 routingContainer(Container);
-
+// DB configuration
+AppDataSource.initialize()
+    .then(() => {
+        // here you can start to work with your database
+    })
+    .catch((error) => console.log(error))
 // Loads all the Controllers from the directories and provides the routing facility
 useExpressServer(App, {
   routePrefix: ENV_CONFIG.app.apiRoot,

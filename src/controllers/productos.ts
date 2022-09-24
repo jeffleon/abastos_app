@@ -1,16 +1,16 @@
 import { JsonController, Req, Res, Param, Body, Get, Post, Put, Delete, Header } from 'routing-controllers';
 import { Service } from 'typedi';
 import { Request, Response } from 'express';
-import ExampleInjectedService from '../service/compras';
+import ProductsService from '../service/productos';
+import { ProductsI } from '../types/products';
 
 @JsonController()
 @Header("Content-Type", "application/json")
 @Service()
 export class ComprasController {
-    constructor(public _exampleInjectable: ExampleInjectedService) { }
+    constructor(public _productsService: ProductsService) { }
     @Get('/')
     getAll(@Req() request: Request, @Res() response: Response) {
-      this._exampleInjectable.printMessage();
       return response.status(200).json({'msg':'This action returns all users'});
     }
   
@@ -20,8 +20,9 @@ export class ComprasController {
     }
   
     @Post('/')
-    post(@Body() user: any) {
-      return 'Saving user...';
+    async post(@Body() product: ProductsI, @Res() response: Response) {
+      const resp = await this._productsService.saveProduct(product);
+      return response.status(200).json(resp);
     }
   
     @Put('/:id')
