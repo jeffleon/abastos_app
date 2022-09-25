@@ -11,6 +11,7 @@ import { ENV_CONFIG } from './config/app/config';
 import AppDataSource from './config/db/config';
 import { tokenVerification } from './utils/jwt';
 import { CustomErrorHandler } from './middlewares/errorHandler';
+import { FinalMiddleware } from './middlewares/finallMiddleware';
 
 const App: Express = express();
 const baseDir = __dirname;
@@ -27,7 +28,7 @@ AppDataSource.initialize()
 useExpressServer(App, {
   routePrefix: ENV_CONFIG.app.apiRoot,
   defaultErrorHandler: false,
-  middlewares: [CustomErrorHandler],
+  middlewares: [CustomErrorHandler, FinalMiddleware],
   authorizationChecker: async (action: Action) => {
     const token = action.request.headers[process.env.HEADER_JWT];
     if (!token){
