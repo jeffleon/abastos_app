@@ -1,4 +1,5 @@
-import { Column, PrimaryGeneratedColumn, Entity } from "typeorm";
+import { Column, PrimaryGeneratedColumn, Entity, ManyToMany, JoinTable } from "typeorm";
+import { Compras } from "./purchase";
 
 @Entity()
 export class Productos {
@@ -12,8 +13,12 @@ export class Productos {
     descripcion: string
 
     @Column()
-    cantidad: string
+    inventario: string
 
     @Column()
     precio_promedio: number
+
+    @ManyToMany(() => Compras, (compra) => compra.productos)
+    @JoinTable()
+    compras: Compras[]
 }

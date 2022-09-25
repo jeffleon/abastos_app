@@ -10,7 +10,6 @@ import { ProductsI } from '../types/products';
 export class ProductsController {
     constructor(public _productsService: ProductsService) { }
     
-    @Authorized()
     @Get('/')
     async getAll(@Res() response: Response) {
       try {
@@ -21,7 +20,6 @@ export class ProductsController {
       }
     }
   
-    @Authorized()
     @Get('/:id')
     async getOne(@Param('id') id: number, @Res() response: Response) {
       try {
@@ -35,7 +33,6 @@ export class ProductsController {
       }
     }
   
-    @Authorized()
     @Post('/')
     async post(@Body() product: ProductsI, @Res() response: Response) {
       try {
