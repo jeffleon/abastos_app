@@ -1,37 +1,64 @@
-import { JsonController, Req, Res, Param, Body, Get, Post, Put, Delete, Header } from 'routing-controllers';
+import { JsonController, Res, Param, Body, Get, Post, Put, Delete, Header } from 'routing-controllers';
 import { Service } from 'typedi';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import ProductsService from '../service/productos';
 import { ProductsI } from '../types/products';
 
-@JsonController()
+@JsonController('/products')
 @Header("Content-Type", "application/json")
 @Service()
 export class ComprasController {
     constructor(public _productsService: ProductsService) { }
     @Get('/')
-    getAll(@Req() request: Request, @Res() response: Response) {
-      return response.status(200).json({'msg':'This action returns all users'});
+    async getAll(@Res() response: Response) {
+      try {
+        const products = await this._productsService.getAllProducts();
+        return response.status(200).json({data: products});
+      } catch(error){
+        return response.status(500).json({error})
+      }
     }
   
     @Get('/:id')
-    getOne(@Param('id') id: number) {
-      return 'This action returns user #' + id;
+    async getOne(@Param('id') id: number, @Res() response: Response) {
+      try {
+        const product = await this._productsService.getProduct(id);
+        if (product === null){
+          return response.status(404).json({msg: "product not found"});
+        }
+        return response.status(200).json({data: product});
+      } catch(error){
+        return response.status(500).json({error})
+      }
     }
   
     @Post('/')
     async post(@Body() product: ProductsI, @Res() response: Response) {
-      const resp = await this._productsService.saveProduct(product);
-      return response.status(200).json(resp);
+      try {
+        const resp = await this._productsService.saveProduct(product);
+        return response.status(200).json({data: resp});
+      } catch(error) {
+        return response.status(500).json({error: error});
+      }
     }
   
     @Put('/:id')
-    put(@Param('id') id: number, @Body() user: any) {
-      return 'Updating a user...';
+    async put(@Param('id') id: number, @Body() product: ProductsI, @Res() response: Response) {
+      try {
+        const resp = await this._productsService.updateProduct(id, product);
+        return response.status(200).json({data: resp});
+      } catch(error) {
+        return response.status(500).json({error});
+      }
     }
   
     @Delete('/:id')
-    remove(@Param('id') id: number) {
-      return 'Removing user...';
+    async remove(@Param('id') id: number, @Res() response: Response) {
+      try {
+        const resp = await this._productsService.deleteProduct(id);
+        return response.status(200).json({data: resp.affected});
+      } catch(error) {
+        return response.status(500).json({error})
+      }
     }
 }

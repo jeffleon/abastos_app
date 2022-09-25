@@ -17,7 +17,8 @@ const AppDataSource = new DataSource({
 
 const productsRepository = AppDataSource.getRepository(Productos);
 export const Repositories: RepositoriesI = {
-    Products: productsRepository
+    Products: productsRepository,
+    DataSource: AppDataSource
 }
 
 export default AppDataSource;
