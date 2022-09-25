@@ -10,6 +10,7 @@ dotenv.config();
 import { ENV_CONFIG } from './config/app/config';
 import AppDataSource from './config/db/config';
 import { tokenVerification } from './utils/jwt';
+import { CustomErrorHandler } from './middlewares/errorHandler';
 
 const App: Express = express();
 const baseDir = __dirname;
@@ -22,9 +23,11 @@ AppDataSource.initialize()
     })
     .catch((error) => console.log(error))
 // Loads all the Controllers from the directories and provides the routing facility
+
 useExpressServer(App, {
   routePrefix: ENV_CONFIG.app.apiRoot,
   defaultErrorHandler: false,
+  middlewares: [CustomErrorHandler],
   authorizationChecker: async (action: Action) => {
     const token = action.request.headers[process.env.HEADER_JWT];
     if (!token){

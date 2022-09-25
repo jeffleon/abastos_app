@@ -7,7 +7,7 @@ import { ProductsI } from '../types/products';
 @JsonController('/products')
 @Header("Content-Type", "application/json")
 @Service()
-export class ComprasController {
+export class ProductsController {
     constructor(public _productsService: ProductsService) { }
     
     @Authorized()
