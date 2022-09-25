@@ -2,10 +2,8 @@ import { Service } from 'typedi';
 import { Repositories } from '../config/db/config';
 import { Usuarios } from '../models/users';
 import { DecodedI, LoginI, UsersI } from '../types/users';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { usersConfig } from '../config/users/config';
-
+import { createToken, tokenVerification } from '../utils/jwt';
 
 @Service()
 class UsersService {
@@ -26,9 +24,7 @@ class UsersService {
             throw new Error(verified.msg);
         }
         const {nombre, usuario } = verified.account;
-        const token = jwt.sign({
-            nombre, usuario
-        }, usersConfig.tokenSecret , { expiresIn: usersConfig.tokenExpire });
+        const token = createToken(nombre, usuario);
         verified.account.token = token;
         const response = await Repositories.Users.save(verified.account);
         delete response.contrasena;
@@ -36,7 +32,7 @@ class UsersService {
     }
 
     async logout(token: string) {
-        const result = this.tokenVerifiaction(token);
+        const result = tokenVerification(token);
         if (!result.validation){
             throw new Error(result.msg);
         }
@@ -50,22 +46,6 @@ class UsersService {
         return {msg:"user sucessfull, logOut", user: saved.nombre}
     }
 
-    private tokenDecode(token: string) { 
-        try{
-            const {payload} = jwt.decode(token, {complete: true})
-            return {validation: true, payload};
-        } catch {
-            return {validation:false, msg: "token decode failed"}
-        }
-    }
-    private tokenVerifiaction(token: string) {
-        try {
-            const decoded = jwt.verify(token, usersConfig.tokenSecret);
-            return {data: decoded, validation: true};
-          } catch(err) {
-            return {msg: "invalid token", validation: false}
-          }
-    }
     private async userVerification(user: LoginI) {
         const account = await this.getUser(user.usuario);
         if (!account) {

@@ -1,4 +1,4 @@
-import { JsonController, Res, Param, Body, Get, Post, Put, Delete, Header, HeaderParam } from 'routing-controllers';
+import { JsonController, Res, Body, Post, Header, HeaderParam, Authorized } from 'routing-controllers';
 import { Service } from 'typedi';
 import { Response } from 'express';
 import { LoginI, UsersI } from '../types/users';
@@ -29,6 +29,7 @@ export class UsersController {
       }
     }
   
+    @Authorized()
     @Post('/logout')
     async post(@HeaderParam('Authorization') token: string, @Res() response: Response) {
       try {

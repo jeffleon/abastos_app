@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import cors from "cors";
 import express, { Express } from 'express';
-import { useExpressServer, useContainer as routingContainer } from 'routing-controllers';
+import { useExpressServer, useContainer as routingContainer, Action } from 'routing-controllers';
 import * as http from 'http';
 import Container from 'typedi';
 import * as bodyParser from 'body-parser';
@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { ENV_CONFIG } from './config/app/config';
 import AppDataSource from './config/db/config';
+import { tokenVerification } from './utils/jwt';
 
 const App: Express = express();
 const baseDir = __dirname;
@@ -24,6 +25,21 @@ AppDataSource.initialize()
 useExpressServer(App, {
   routePrefix: ENV_CONFIG.app.apiRoot,
   defaultErrorHandler: false,
+  authorizationChecker: async (action: Action) => {
+    const token = action.request.headers[process.env.HEADER_JWT];
+    if (!token){
+      return false;
+    }
+    const BearerToken = token.split(' ');
+    if (BearerToken[0] !== process.env.MAGIC_WORD || BearerToken.length < 2) {
+      return false;
+    }
+    const result = tokenVerification(BearerToken[1]);
+    if (!result.validation){
+      return false;
+    }
+    return true;
+  },
   controllers: [baseDir + `/**/controllers/*{.js,.ts}`]
 });
 

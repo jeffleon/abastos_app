@@ -1,4 +1,4 @@
-import { JsonController, Res, Param, Body, Get, Post, Put, Delete, Header } from 'routing-controllers';
+import { JsonController, Res, Param, Body, Get, Post, Put, Delete, Header, Authorized } from 'routing-controllers';
 import { Service } from 'typedi';
 import { Response } from 'express';
 import ProductsService from '../service/products';
@@ -9,6 +9,8 @@ import { ProductsI } from '../types/products';
 @Service()
 export class ComprasController {
     constructor(public _productsService: ProductsService) { }
+    
+    @Authorized()
     @Get('/')
     async getAll(@Res() response: Response) {
       try {
@@ -19,6 +21,7 @@ export class ComprasController {
       }
     }
   
+    @Authorized()
     @Get('/:id')
     async getOne(@Param('id') id: number, @Res() response: Response) {
       try {
@@ -32,6 +35,7 @@ export class ComprasController {
       }
     }
   
+    @Authorized()
     @Post('/')
     async post(@Body() product: ProductsI, @Res() response: Response) {
       try {
@@ -42,6 +46,7 @@ export class ComprasController {
       }
     }
   
+    @Authorized()
     @Put('/:id')
     async put(@Param('id') id: number, @Body() product: ProductsI, @Res() response: Response) {
       try {
@@ -52,6 +57,7 @@ export class ComprasController {
       }
     }
   
+    @Authorized()
     @Delete('/:id')
     async remove(@Param('id') id: number, @Res() response: Response) {
       try {
