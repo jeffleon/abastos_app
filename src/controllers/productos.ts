@@ -1,7 +1,7 @@
 import { JsonController, Res, Param, Body, Get, Post, Put, Delete, Header } from 'routing-controllers';
 import { Service } from 'typedi';
 import { Response } from 'express';
-import ProductsService from '../service/productos';
+import ProductsService from '../service/products';
 import { ProductsI } from '../types/products';
 
 @JsonController('/products')
