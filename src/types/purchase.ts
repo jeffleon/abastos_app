@@ -9,3 +9,6 @@ export interface PurchaseI {
     productos: ProductsI[]
 }
 
+export interface paymentI {
+    payment: number
+}

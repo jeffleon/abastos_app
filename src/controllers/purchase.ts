@@ -1,8 +1,8 @@
-import { JsonController, Res, Body, Post, Header } from 'routing-controllers';
+import { JsonController, Res, Body, Post, Header, Get, Put, Param } from 'routing-controllers';
 import { Service } from 'typedi';
 import { Response } from 'express';
 import PurchaseService from '../service/purchase';
-import { PurchaseI } from '../types/purchase';
+import { paymentI, PurchaseI } from '../types/purchase';
 import ProductsService from '../service/products';
 
 @JsonController('/purchase')
@@ -24,50 +24,41 @@ export class PurchaseController {
       }
     }
     
-    // @Authorized()
-    // @Get('/')
-    // async getAll(@Res() response: Response) {
-    //   try {
-    //     const products = await this._productsService.getAllProducts();
-    //     return response.status(200).json({data: products});
-    //   } catch(error){
-    //     return response.status(500).json({error})
-    //   }
-    // }
-  
-    // @Authorized()
-    // @Get('/:id')
-    // async getOne(@Param('id') id: number, @Res() response: Response) {
-    //   try {
-    //     const product = await this._productsService.getProduct(id);
-    //     if (product === null){
-    //       return response.status(404).json({msg: "product not found"});
-    //     }
-    //     return response.status(200).json({data: product});
-    //   } catch(error){
-    //     return response.status(500).json({error})
-    //   }
-    // }
-    
-    // @Authorized()
-    // @Put('/:id')
-    // async put(@Param('id') id: number, @Body() product: ProductsI, @Res() response: Response) {
-    //   try {
-    //     const resp = await this._productsService.updateProduct(id, product);
-    //     return response.status(200).json({data: resp});
-    //   } catch(error) {
-    //     return response.status(500).json({error});
-    //   }
-    // }
-  
-    // @Authorized()
-    // @Delete('/:id')
-    // async remove(@Param('id') id: number, @Res() response: Response) {
-    //   try {
-    //     const resp = await this._productsService.deleteProduct(id);
-    //     return response.status(200).json({data: resp.affected});
-    //   } catch(error) {
-    //     return response.status(500).json({error})
-    //   }
-    // }
+    @Get('/debts')
+    async getDebts(@Res() response: Response) {
+      try {
+        const resp = await this._purchaseService.getDebts();
+        return response.status(200).json({data: resp});
+      } catch(error) {
+        return response.status(500).json({error: error});
+      }
+    }
+
+    @Put('/payment/:id')
+    async payment(@Param('id') id: number, @Body() payment: paymentI, @Res() response: Response) {
+      try {
+        const purchase = await this._purchaseService.getPurchaseByID(id);
+        if (!purchase) {
+          return response.status(404).json({error: 'la cuenta que solicita no se encontro'});
+        }
+        if (purchase.valor_deuda < payment.payment) {
+          return response.status(400).json({error: 'su cuenta es menor a lo que desea pagar'});
+        }
+        purchase.valor_deuda -= payment.payment; 
+        const resp = await this._purchaseService.updatePurchase(id, purchase);
+        return response.status(200).json({data: resp});
+      } catch(error) {
+        return response.status(500).json({error: error});
+      }
+    }
+
+    @Get('/')
+    async getPurchaseToday(@Res() response: Response){
+      try {
+        const resp = await this._purchaseService.getPurchaseToday();
+        return response.status(200).json({data: resp});
+      } catch(error) {
+        return response.status(500).json({error: error});
+      }
+    }
 }
