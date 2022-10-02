@@ -4,7 +4,7 @@ import { Response } from 'express';
 import { LoginI, UsersI } from '../types/users';
 import UsersService from '../service/users';
 
-@JsonController('/users')
+@JsonController(`${process.env.APIROOT}/users`)
 @Header("Content-Type", "application/json")
 @Service()
 export class UsersController {

@@ -5,7 +5,7 @@ import ProductsService from '../service/products';
 import SaleService from '../service/sales';
 import { SaleI } from '../types/sales';
 
-@JsonController('/sales')
+@JsonController(`${process.env.APIROOT}/sales`)
 @Header("Content-Type", "application/json")
 @Authorized()
 @Service()

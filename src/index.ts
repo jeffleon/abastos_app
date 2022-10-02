@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import cors from "cors";
 import express, { Express } from 'express';
 import { useExpressServer, useContainer as routingContainer, Action } from 'routing-controllers';
 import * as http from 'http';
@@ -26,7 +25,6 @@ AppDataSource.initialize()
 // Loads all the Controllers from the directories and provides the routing facility
 
 useExpressServer(App, {
-  routePrefix: ENV_CONFIG.app.apiRoot,
   defaultErrorHandler: false,
   middlewares: [CustomErrorHandler, FinalMiddleware],
   authorizationChecker: async (action: Action) => {
@@ -47,7 +45,6 @@ useExpressServer(App, {
   controllers: [baseDir + `/**/controllers/*{.js,.ts}`]
 });
 
-App.use(cors);
 App.use(bodyParser.urlencoded({ extended: false }));
 App.use(bodyParser.json());
 

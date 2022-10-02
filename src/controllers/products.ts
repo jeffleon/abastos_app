@@ -4,7 +4,7 @@ import { Response } from 'express';
 import ProductsService from '../service/products';
 import { ProductsI } from '../types/products';
 
-@JsonController('/products')
+@JsonController(`${process.env.APIROOT}/products`)
 @Header("Content-Type", "application/json")
 @Authorized()
 @Service()
