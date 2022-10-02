@@ -11,6 +11,7 @@ import AppDataSource from './config/db/config';
 import { tokenVerification } from './utils/jwt';
 import { CustomErrorHandler } from './middlewares/errorHandler';
 import { FinalMiddleware } from './middlewares/finallMiddleware';
+import { CorsMiddleware } from './middlewares/corsMiddleware';
 
 const App: Express = express();
 const baseDir = __dirname;
@@ -26,7 +27,7 @@ AppDataSource.initialize()
 
 useExpressServer(App, {
   defaultErrorHandler: false,
-  middlewares: [CustomErrorHandler, FinalMiddleware],
+  middlewares: [CorsMiddleware, CustomErrorHandler, FinalMiddleware],
   authorizationChecker: async (action: Action) => {
     const token = action.request.headers[process.env.HEADER_JWT];
     if (!token){

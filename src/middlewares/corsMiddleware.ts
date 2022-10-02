@@ -4,7 +4,7 @@ import { Response, Request, NextFunction } from 'express';
 
 @Service()
 @Middleware({ type: 'before' })
-export class LoggingMiddleware implements ExpressMiddlewareInterface {
+export class CorsMiddleware implements ExpressMiddlewareInterface {
   use(request: Request, response: Response, next?: NextFunction): void {
     response.setHeader(
         "Access-Control-Allow-Origin",
