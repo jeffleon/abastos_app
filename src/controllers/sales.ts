@@ -22,7 +22,7 @@ export class SalesController {
         });
         return response.status(200).json({data: resp});
       } catch(error) {
-        return response.status(500).json({error: error});
+        return response.status(500).json({error: error.message});
       }
     }
     
@@ -32,7 +32,7 @@ export class SalesController {
         const resp = await this._saleService.getSalesToday();
         return response.status(200).json({data: resp});
       } catch(error) {
-        return response.status(500).json({error: error});
+        return response.status(500).json({error: error.message});
       }
     }
 }

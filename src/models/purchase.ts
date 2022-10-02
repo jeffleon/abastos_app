@@ -1,3 +1,4 @@
+import { IsInt, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { Column, PrimaryGeneratedColumn, Entity, ManyToMany, CreateDateColumn,UpdateDateColumn  } from "typeorm";
 import { Productos } from "./products";
 
@@ -6,18 +7,25 @@ export class Compras {
     @PrimaryGeneratedColumn()
     id: number
 
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(3)
     @Column()
     provedor: string
 
     @Column({nullable: true})
     telefono: string
 
+    @IsString()
+    @IsNotEmpty()
     @Column()
     valor_total: string
 
+    @IsInt()
     @Column()
     valor_deuda: number
 
+    @IsInt()
     @Column()
     cantidad_total: number
 

@@ -30,7 +30,7 @@ export class ProductsController {
         }
         return response.status(200).json({data: product});
       } catch(error){
-        return response.status(500).json({error})
+        return response.status(500).json({error: error.message})
       }
     }
   
@@ -40,7 +40,7 @@ export class ProductsController {
         const resp = await this._productsService.saveProduct(product);
         return response.status(200).json({data: resp});
       } catch(error) {
-        return response.status(500).json({error: error});
+        return response.status(500).json({error: error.message});
       }
     }
   
@@ -50,7 +50,7 @@ export class ProductsController {
         const resp = await this._productsService.updateProduct(id, product);
         return response.status(200).json({data: resp});
       } catch(error) {
-        return response.status(500).json({error});
+        return response.status(500).json({error: error.message});
       }
     }
 
@@ -60,7 +60,7 @@ export class ProductsController {
         const resp = await this._productsService.deleteProduct(id);
         return response.status(200).json({data: resp.affected});
       } catch(error) {
-        return response.status(500).json({error})
+        return response.status(500).json({error: error.message})
       }
     }
 }

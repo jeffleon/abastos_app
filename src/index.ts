@@ -43,7 +43,8 @@ useExpressServer(App, {
     }
     return true;
   },
-  controllers: [baseDir + `/**/controllers/*{.js,.ts}`]
+  controllers: [baseDir + `/**/controllers/*{.js,.ts}`],
+  validation: true,
 });
 
 App.use(bodyParser.urlencoded({ extended: false }));

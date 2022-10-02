@@ -3,12 +3,18 @@ import { Repositories } from '../config/db/config';
 import { Between  } from "typeorm";
 import { todayHelper } from '../utils/dates';
 import { SaleI } from '../types/sales';
+import { Ventas } from '../models/sales';
+import { validate } from 'class-validator';
 
 @Service()
 class SaleService {
-    async saveSale(purchase: SaleI):Promise<SaleI> {
-        const product = await Repositories.Sales.save(purchase);
-        return product;
+    async saveSale(sale: SaleI):Promise<SaleI> {
+      const validation = await this.createSaleValidation(sale);
+      if (validation instanceof Error) {
+        return validation
+      }
+      const product = await Repositories.Sales.save(sale);
+      return product;
     }
 
     async getSalesToday() {
@@ -40,6 +46,18 @@ class SaleService {
         }
       });
       return sale;
+    }
+
+    private async createSaleValidation(sale: SaleI) {
+      const venta = new Ventas
+      venta.cantidad_total = sale.cantidad_total;
+      venta.nombre = sale.nombre;
+      venta.valor_total = sale.valor_total;
+      const errors = await validate(venta)
+      if (errors.length > 0) {
+          throw new Error(`Validation failed! ${errors}`);
+      }
+      return venta;
     }
     
 }

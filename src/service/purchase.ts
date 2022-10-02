@@ -3,10 +3,16 @@ import { Repositories } from '../config/db/config';
 import { PurchaseI } from '../types/purchase';
 import { MoreThan, Between  } from "typeorm";
 import { todayHelper } from '../utils/dates';
+import { Compras } from '../models/purchase';
+import { validate } from 'class-validator';
 
 @Service()
 class PurchaseService {
     async savePurchase(purchase: PurchaseI):Promise<PurchaseI> {
+        const validation = await this.createPurchaseValidation(purchase);
+        if (purchase instanceof Error) {
+          return validation; 
+        }
         const product = await Repositories.Purchase.save(purchase);
         return product;
     }
@@ -51,6 +57,18 @@ class PurchaseService {
       return purchase;
     }
     
+    private async createPurchaseValidation(purchase: PurchaseI) {
+      const compra = new Compras
+      compra.provedor = purchase.provedor
+      compra.cantidad_total = purchase.cantidad_total
+      compra.valor_deuda = purchase.valor_deuda
+      compra.valor_total = purchase.valor_total
+      const errors = await validate(compra)
+      if (errors.length > 0) {
+          throw new Error(`Validation failed! ${errors}`);
+      }
+      return compra;
+    }
 }
 
 export default PurchaseService;
