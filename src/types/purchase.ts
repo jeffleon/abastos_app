@@ -5,6 +5,7 @@ export interface PurchaseI {
     provedor: string
     telefono: string
     valor_total: string
+    cantidad_total: number
     valor_deuda: number
     productos: ProductsI[]
 }

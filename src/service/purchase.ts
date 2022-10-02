@@ -1,6 +1,5 @@
 import { Service } from 'typedi';
 import { Repositories } from '../config/db/config';
-import { ProductsI } from '../types/products';
 import { PurchaseI } from '../types/purchase';
 import { MoreThan, Between  } from "typeorm";
 import { todayHelper } from '../utils/dates';

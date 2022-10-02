@@ -9,6 +9,7 @@ import UsersService from '../service/users';
 @Service()
 export class UsersController {
     constructor(public _usersService: UsersService) { }
+
     @Post('/signUp')
     async singUp(@Body() user: UsersI, @Res() response: Response) {
       try {

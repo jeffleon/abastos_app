@@ -2,21 +2,18 @@ import { Column, PrimaryGeneratedColumn, Entity, ManyToMany, CreateDateColumn,Up
 import { Productos } from "./products";
 
 @Entity()
-export class Compras {
+export class Ventas {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
-    provedor: string
+    nombre: string
 
     @Column({nullable: true})
     telefono: string
 
     @Column()
-    valor_total: string
-
-    @Column()
-    valor_deuda: number
+    valor_total: number
 
     @Column()
     cantidad_total: number

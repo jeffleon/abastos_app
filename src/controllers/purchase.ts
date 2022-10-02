@@ -1,4 +1,4 @@
-import { JsonController, Res, Body, Post, Header, Get, Put, Param } from 'routing-controllers';
+import { JsonController, Res, Body, Post, Header, Get, Put, Param, Authorized } from 'routing-controllers';
 import { Service } from 'typedi';
 import { Response } from 'express';
 import PurchaseService from '../service/purchase';
@@ -7,6 +7,7 @@ import ProductsService from '../service/products';
 
 @JsonController('/purchase')
 @Header("Content-Type", "application/json")
+@Authorized()
 @Service()
 export class PurchaseController {
     constructor(public _purchaseService: PurchaseService, public _productsService: ProductsService) { }
@@ -20,7 +21,7 @@ export class PurchaseController {
         });
         return response.status(200).json({data: resp});
       } catch(error) {
-        return response.status(500).json({error: error});
+        return response.status(500).json({error: error.message});
       }
     }
     

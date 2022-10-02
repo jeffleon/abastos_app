@@ -6,6 +6,7 @@ import { ProductsI } from '../types/products';
 
 @JsonController('/products')
 @Header("Content-Type", "application/json")
+@Authorized()
 @Service()
 export class ProductsController {
     constructor(public _productsService: ProductsService) { }
@@ -43,7 +44,6 @@ export class ProductsController {
       }
     }
   
-    @Authorized()
     @Put('/:id')
     async put(@Param('id') id: number, @Body() product: ProductsI, @Res() response: Response) {
       try {
@@ -53,8 +53,7 @@ export class ProductsController {
         return response.status(500).json({error});
       }
     }
-  
-    @Authorized()
+
     @Delete('/:id')
     async remove(@Param('id') id: number, @Res() response: Response) {
       try {

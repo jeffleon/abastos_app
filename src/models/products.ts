@@ -1,5 +1,6 @@
 import { Column, PrimaryGeneratedColumn, Entity, ManyToMany, JoinTable } from "typeorm";
 import { Compras } from "./purchase";
+import { Ventas } from "./sales";
 
 @Entity()
 export class Productos {
@@ -21,4 +22,8 @@ export class Productos {
     @ManyToMany(() => Compras, (compra) => compra.productos)
     @JoinTable()
     compras: Compras[]
+
+    @ManyToMany(() => Ventas, (venta) => venta.productos)
+    @JoinTable()
+    ventas: Ventas[]
 }
