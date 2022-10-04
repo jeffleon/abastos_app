@@ -27,7 +27,7 @@ AppDataSource.initialize()
 
 useExpressServer(App, {
   defaultErrorHandler: false,
-  middlewares: [CorsMiddleware, CustomErrorHandler, FinalMiddleware],
+  middlewares: [CorsMiddleware ,CustomErrorHandler, FinalMiddleware],
   authorizationChecker: async (action: Action) => {
     const token = action.request.headers[process.env.HEADER_JWT];
     if (!token){
@@ -43,6 +43,7 @@ useExpressServer(App, {
     }
     return true;
   },
+  cors: true,
   controllers: [baseDir + `/**/controllers/*{.js,.ts}`],
   validation: true,
 });
