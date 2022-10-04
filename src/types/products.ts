@@ -4,4 +4,5 @@ export interface ProductsI  {
     descripcion: string
     inventario: string
     precio_promedio: number
+    image_url: string
 }
