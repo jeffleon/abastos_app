@@ -17,7 +17,6 @@ export class Productos {
     @Column()
     descripcion: string
 
-    @IsInt()
     @Column()
     inventario: number
 
