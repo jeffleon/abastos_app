@@ -17,6 +17,11 @@ class SaleService {
       return product;
     }
 
+    async getTotalValueSale(sales:Ventas[]) {
+      const sumPurchaseToday = sales.reduce((prevVal, curVal) => prevVal + curVal.valor_total,0);
+      return sumPurchaseToday;
+    } 
+
     async getSalesToday() {
       const today = todayHelper();
       const sales = await Repositories.Sales.find({
@@ -24,7 +29,8 @@ class SaleService {
           created_at: Between(today.start, today.end),
         },
       });
-      return sales;
+      const total = await this.getTotalValueSale(sales);
+      return {data:sales, total};
     }
     
     async updateSale(id: number, data2Change: SaleI) {

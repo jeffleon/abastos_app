@@ -35,7 +35,7 @@ export class SalesController {
     async getSalesToday(@Res() response: Response){
       try {
         const resp = await this._saleService.getSalesToday();
-        return response.status(200).json({data: resp});
+        return response.status(200).json(resp);
       } catch(error) {
         return response.status(500).json({error: error.message});
       }
