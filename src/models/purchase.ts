@@ -16,10 +16,9 @@ export class Compras {
     @Column({nullable: true})
     telefono: string
 
-    @IsString()
-    @IsNotEmpty()
+    @IsInt()
     @Column()
-    valor_total: string
+    valor_total: number
 
     @IsInt()
     @Column()

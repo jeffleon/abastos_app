@@ -4,6 +4,8 @@ import { DeleteResult, UpdateResult } from 'typeorm';
 import { Repositories } from '../config/db/config';
 import { Productos } from '../models/products';
 import { ProductsI } from '../types/products';
+import { PurchaseProductsI } from '../types/purchase';
+import { SaleProductsI } from '../types/sales';
 
 @Service()
 class ProductsService {
@@ -14,6 +16,30 @@ class ProductsService {
       }
       const product = await Repositories.Products.save(products);
       return product;
+    }
+
+    async lessProduct(product:ProductsI, item:SaleProductsI){ 
+      product.inventario -= item.cantidad
+      if (product.inventario < 0) {
+        product.inventario = 0;
+      }
+      return product;
+    }
+
+    async sumAvgProduct(product:ProductsI, item:PurchaseProductsI){ 
+      product.inventario += item.cantidad
+      const avg = await this.avaragePrice(product.precio_promedio, item.precio);
+      product.precio_promedio = avg;
+      return product;
+    }
+
+    async avaragePrice(reference:number, price:number) {
+      const diference = reference - price;
+      if (Math.abs(diference) >= 10000) {
+        return reference>=price?reference:price; 
+      }
+      const avg = Math.round((reference + price)/2)
+      return avg;
     }
 
     async getProduct(id: number):Promise<ProductsI> {

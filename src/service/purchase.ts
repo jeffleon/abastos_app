@@ -17,13 +17,19 @@ class PurchaseService {
         return product;
     }
 
+    async getTotalValuePurchase(purchase:Compras[]) {
+      const sumPurchaseToday = purchase.reduce((prevVal, curVal) => prevVal + curVal.valor_total,0);
+      return sumPurchaseToday;
+    } 
+
     async getDebts() {
       const debtPurchase = await Repositories.Purchase.find({
         where: {
           valor_deuda: MoreThan(0)
         },
       });
-      return debtPurchase;
+      const total = await this.getTotalValuePurchase(debtPurchase);
+      return {data: debtPurchase, total};
     }
 
     async getPurchaseToday() {
@@ -33,7 +39,8 @@ class PurchaseService {
           created_at: Between(today.start, today.end),
         },
       });
-      return purchase;
+      const total = await this.getTotalValuePurchase(purchase);
+      return {data: purchase, total};
     }
     
     async updatePurchase(id: number, data2Change: PurchaseI) {

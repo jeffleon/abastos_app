@@ -2,8 +2,9 @@ import { JsonController, Res, Body, Post, Header, Get, Put, Param, Authorized } 
 import { Service } from 'typedi';
 import { Response } from 'express';
 import PurchaseService from '../service/purchase';
-import { paymentI, PurchaseI } from '../types/purchase';
+import { paymentI, PurchaseRequestI } from '../types/purchase';
 import ProductsService from '../service/products';
+import { ItemsIToProductsPurchase } from '../utils/cast';
 
 @JsonController(`${process.env.APIROOT}/purchase`)
 @Header("Content-Type", "application/json")
@@ -13,12 +14,17 @@ export class PurchaseController {
     constructor(public _purchaseService: PurchaseService, public _productsService: ProductsService) { }
 
     @Post('/')
-    async post(@Body() purchase: PurchaseI, @Res() response: Response) {
-      try {
-        const resp = await this._purchaseService.savePurchase(purchase);
-        resp.productos.forEach((product)=>{
-            this._productsService.updateProduct(product.id, product);
-        });
+    async post(@Body() purchase: PurchaseRequestI, @Res() response: Response) {
+      try { 
+        const res = ItemsIToProductsPurchase(purchase);
+        const resp = await this._purchaseService.savePurchase(res);
+        const products = await Promise.all(purchase.productos.map(async (element) => {
+          const product = await this._productsService.getProduct(element.id);
+          const resultProduct = await this._productsService.sumAvgProduct(product, element);
+          await this._productsService.updateProduct(resultProduct.id, resultProduct);
+          return resultProduct;
+        }));
+        resp.productos = products;
         return response.status(200).json({data: resp});
       } catch(error) {
         return response.status(500).json({error: error.message});
@@ -29,7 +35,7 @@ export class PurchaseController {
     async getDebts(@Res() response: Response) {
       try {
         const resp = await this._purchaseService.getDebts();
-        return response.status(200).json({data: resp});
+        return response.status(200).json(resp);
       } catch(error) {
         return response.status(500).json({error: error});
       }
@@ -57,7 +63,7 @@ export class PurchaseController {
     async getPurchaseToday(@Res() response: Response){
       try {
         const resp = await this._purchaseService.getPurchaseToday();
-        return response.status(200).json({data: resp});
+        return response.status(200).json(resp);
       } catch(error) {
         return response.status(500).json({error: error});
       }
