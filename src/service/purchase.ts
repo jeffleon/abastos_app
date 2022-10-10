@@ -64,12 +64,13 @@ class PurchaseService {
       return purchase;
     }
     
-    private async createPurchaseValidation(purchase: PurchaseI) {
+    private async createPurchaseValidation(purchase: PurchaseI) :Promise<Compras> {
       const compra = new Compras
       compra.provedor = purchase.provedor
       compra.cantidad_total = purchase.cantidad_total
       compra.valor_deuda = purchase.valor_deuda
       compra.valor_total = purchase.valor_total
+      compra.usuario_id = purchase.usuario_id
       const errors = await validate(compra)
       if (errors.length > 0) {
           throw new Error(`Validation failed! ${errors}`);

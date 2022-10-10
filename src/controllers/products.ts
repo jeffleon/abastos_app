@@ -4,7 +4,7 @@ import { Response } from 'express';
 import ProductsService from '../service/products';
 import { ProductsI } from '../types/products';
 
-@JsonController(`${process.env.APIROOT}/products`)
+@JsonController(`${process.env.APIROOT}/user/:user_id/products`)
 @Header("Content-Type", "application/json")
 @Authorized()
 @Service()
@@ -12,9 +12,9 @@ export class ProductsController {
     constructor(public _productsService: ProductsService) { }
     
     @Get('/')
-    async getAll(@Res() response: Response) {
+    async getAll(@Param('user_id') user_id: number,@Res() response: Response) {
       try {
-        const products = await this._productsService.getAllProducts();
+        const products = await this._productsService.getAllProducts(user_id);
         return response.status(200).json({data: products});
       } catch(error){
         return response.status(500).json({error})

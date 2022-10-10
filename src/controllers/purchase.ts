@@ -6,7 +6,7 @@ import { paymentI, PurchaseRequestI } from '../types/purchase';
 import ProductsService from '../service/products';
 import { ItemsIToProductsPurchase } from '../utils/cast';
 
-@JsonController(`${process.env.APIROOT}/purchase`)
+@JsonController(`${process.env.APIROOT}/user/:user_id/purchase`)
 @Header("Content-Type", "application/json")
 @Authorized()
 @Service()

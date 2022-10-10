@@ -6,7 +6,7 @@ import SaleService from '../service/sales';
 import {SaleRequestI } from '../types/sales';
 import { ItemsIToProductsSale } from '../utils/cast';
 
-@JsonController(`${process.env.APIROOT}/sales`)
+@JsonController(`${process.env.APIROOT}/user/:user_id/sales`)
 @Header("Content-Type", "application/json")
 @Authorized()
 @Service()
@@ -18,7 +18,7 @@ export class SalesController {
       try {
         const res = ItemsIToProductsSale(sale);
         const resp = await this._saleService.saveSale(res);
-        const products = await Promise.all(sale.productos.map(async(element)=>{
+        const products = await Promise.all(sale.productos.map(async(element)=> {
           const product = await this._productsService.getProduct(element.id);
           const resultsale = await this._productsService.lessProduct(product, element);
           await this._productsService.updateProduct(product.id, resultsale);

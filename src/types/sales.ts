@@ -7,6 +7,7 @@ export interface SaleI {
     valor_total: number
     cantidad_total: number
     productos: ProductsI[]
+    usuario_id: number
 }
 
 export interface SaleRequestI {
@@ -16,12 +17,14 @@ export interface SaleRequestI {
     valor_total: number
     cantidad_total: number
     productos: SaleProductsI[]
+    usuario_id: number
 }
 
 
 export interface SaleProductsI {
     nombre: string
     cantidad: number
-    precio: number
+    valor_total: number
+    valor_unitario: number
     id: number
 }

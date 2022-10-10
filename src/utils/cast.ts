@@ -9,16 +9,12 @@ export function ItemsIToProductsPurchase(req:PurchaseRequestI) {
         valor_total: req.valor_total,
         cantidad_total: req.cantidad_total,
         valor_deuda: req.valor_deuda,
+        usuario_id: req.usuario_id,
         productos: []
     };
     req.productos.forEach((element) => {
         const product:ProductsI = {
             id: element.id,
-            nombre: "",
-            descripcion: "",
-            inventario: 0,
-            precio_promedio: 0,
-            image_url: ""
         }
         res.productos.push(product)
     });
@@ -31,16 +27,12 @@ export function ItemsIToProductsSale(sale: SaleRequestI) {
         telefono: sale.telefono,
         valor_total: sale.valor_total,
         cantidad_total: sale.cantidad_total,
+        usuario_id: sale.usuario_id,
         productos: []
     };
     sale.productos.forEach((element) => {
         const product:ProductsI = {
             id: element.id,
-            nombre: "",
-            descripcion: "",
-            inventario: 0,
-            precio_promedio: 0,
-            image_url: ""
         }
         res.productos.push(product)
     });

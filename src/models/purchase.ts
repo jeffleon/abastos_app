@@ -28,6 +28,9 @@ export class Compras {
     @Column()
     cantidad_total: number
 
+    @Column()
+    usuario_id: number
+
     @ManyToMany(() => Productos, (productos) => productos.compras)
     productos: Productos[]
 

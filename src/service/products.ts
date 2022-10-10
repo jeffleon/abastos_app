@@ -28,13 +28,16 @@ class ProductsService {
 
     async sumAvgProduct(product:ProductsI, item:PurchaseProductsI){ 
       product.inventario += item.cantidad
-      const avg = await this.avaragePrice(product.precio_promedio, item.precio);
+      const avg = await this.avaragePrice(product.precio_promedio, item.valor_unitario);
       product.precio_promedio = avg;
       return product;
     }
 
     async avaragePrice(reference:number, price:number) {
       const diference = reference - price;
+      if (reference === 0 ||  price === 0) {
+        return reference >= price?reference:price;
+      }
       if (Math.abs(diference) >= 10000) {
         return reference>=price?reference:price; 
       }
@@ -49,8 +52,12 @@ class ProductsService {
       return product;
     }
 
-    async getAllProducts():Promise<ProductsI[]> {
-      const products = await Repositories.Products.find();
+    async getAllProducts(user_id: number):Promise<ProductsI[]> {
+      const products = await Repositories.Products.find({
+        where: {
+          usuario_id: user_id,
+        },
+      });
       return products;
     }
 

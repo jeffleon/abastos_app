@@ -34,4 +34,7 @@ export class Productos {
     @ManyToMany(() => Ventas, (venta) => venta.productos)
     @JoinTable()
     ventas: Ventas[]
+    
+    @Column()
+    usuario_id: number
 }
