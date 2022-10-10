@@ -1,4 +1,4 @@
-import { JsonController, Res, Body, Post, Header, Get, Authorized} from 'routing-controllers';
+import { JsonController, Res, Body, Post, Header, Get, Authorized, Param} from 'routing-controllers';
 import { Service } from 'typedi';
 import { Response } from 'express';
 import ProductsService from '../service/products';
@@ -32,9 +32,9 @@ export class SalesController {
     }
     
     @Get('/')
-    async getSalesToday(@Res() response: Response){
+    async getSalesToday(@Param('user_id') user_id: number, @Res() response: Response){
       try {
-        const resp = await this._saleService.getSalesToday();
+        const resp = await this._saleService.getSalesToday(user_id);
         return response.status(200).json(resp);
       } catch(error) {
         return response.status(500).json({error: error.message});

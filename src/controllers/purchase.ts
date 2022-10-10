@@ -32,9 +32,9 @@ export class PurchaseController {
     }
     
     @Get('/debts')
-    async getDebts(@Res() response: Response) {
+    async getDebts(@Param('user_id') user_id: number, @Res() response: Response) {
       try {
-        const resp = await this._purchaseService.getDebts();
+        const resp = await this._purchaseService.getDebts(user_id);
         return response.status(200).json(resp);
       } catch(error) {
         return response.status(500).json({error: error});
@@ -60,9 +60,9 @@ export class PurchaseController {
     }
 
     @Get('/')
-    async getPurchaseToday(@Res() response: Response){
+    async getPurchaseToday(@Param('user_id') user_id: number, @Res() response: Response){
       try {
-        const resp = await this._purchaseService.getPurchaseToday();
+        const resp = await this._purchaseService.getPurchaseToday(user_id);
         return response.status(200).json(resp);
       } catch(error) {
         return response.status(500).json({error: error});

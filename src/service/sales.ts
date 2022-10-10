@@ -22,11 +22,12 @@ class SaleService {
       return sumPurchaseToday;
     } 
 
-    async getSalesToday() {
+    async getSalesToday(user_id: number) {
       const today = todayHelper();
       const sales = await Repositories.Sales.find({
         where: {
           created_at: Between(today.start, today.end),
+          usuario_id: user_id,
         },
       });
       const total = await this.getTotalValueSale(sales);

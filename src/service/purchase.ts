@@ -22,21 +22,23 @@ class PurchaseService {
       return sumPurchaseToday;
     } 
 
-    async getDebts() {
+    async getDebts(user_id: number) {
       const debtPurchase = await Repositories.Purchase.find({
         where: {
-          valor_deuda: MoreThan(0)
+          valor_deuda: MoreThan(0),
+          usuario_id: user_id
         },
       });
       const total = await this.getTotalValuePurchase(debtPurchase);
       return {data: debtPurchase, total};
     }
 
-    async getPurchaseToday() {
+    async getPurchaseToday(user_id: number) {
       const today = todayHelper();
       const purchase = await Repositories.Purchase.find({
         where: {
           created_at: Between(today.start, today.end),
+          usuario_id: user_id
         },
       });
       const total = await this.getTotalValuePurchase(purchase);
