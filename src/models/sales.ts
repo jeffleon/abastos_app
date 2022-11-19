@@ -9,7 +9,7 @@ export class Ventas {
 
     @IsString()
     @IsNotEmpty()
-    @MinLength(3)
+    @MinLength(2)
     @Column()
     nombre: string
 

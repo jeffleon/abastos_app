@@ -9,7 +9,7 @@ export class Compras {
 
     @IsString()
     @IsNotEmpty()
-    @MinLength(3)
+    @MinLength(2)
     @Column()
     provedor: string
 
