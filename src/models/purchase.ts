@@ -1,6 +1,6 @@
 import { IsInt, IsNotEmpty, IsString, MinLength } from "class-validator";
-import { Column, PrimaryGeneratedColumn, Entity, ManyToMany, CreateDateColumn,UpdateDateColumn  } from "typeorm";
-import { Productos } from "./products";
+import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn,UpdateDateColumn, OneToMany  } from "typeorm";
+import { ProductosComprados } from "./purchase_products";
 
 @Entity()
 export class Compras {
@@ -31,8 +31,8 @@ export class Compras {
     @Column()
     usuario_id: number
 
-    @ManyToMany(() => Productos, (productos) => productos.compras)
-    productos: Productos[]
+    @OneToMany(() => ProductosComprados, (productoComprado:ProductosComprados) => productoComprado.compra)
+    productos: ProductosComprados[]
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     created_at: Date;

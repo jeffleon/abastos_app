@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { Repositories } from '../config/db/config';
-import { PurchaseI } from '../types/purchase';
+import { PurchaseI, PurchaseProductsI, PurchaseRequestI } from '../types/purchase';
 import { MoreThan, Between  } from "typeorm";
 import { todayHelper } from '../utils/dates';
 import { Compras } from '../models/purchase';
@@ -8,13 +8,27 @@ import { validate } from 'class-validator';
 
 @Service()
 class PurchaseService {
-    async savePurchase(purchase: PurchaseI):Promise<PurchaseI> {
+    async savePurchase(purchase: PurchaseRequestI):Promise<PurchaseI> {
         const validation = await this.createPurchaseValidation(purchase);
         if (purchase instanceof Error) {
           return validation; 
         }
         const product = await Repositories.Purchase.save(purchase);
+        const productWithPurchase = purchase.productos.map((element)=>{
+          return {...element, compra: product}
+        })
+        await this.saveProductPurchase(productWithPurchase)
         return product;
+    }
+
+    async saveProductPurchase(productPurchase: PurchaseProductsI[]) {
+      const response = await Repositories.ProductPurchase.save(productPurchase)
+      return response
+    }
+
+    async deletePurchase(id:number) {
+      const del = await Repositories.Purchase.delete(id);
+      return del;
     }
 
     async getTotalValuePurchase(purchase:Compras[]) {
@@ -40,6 +54,9 @@ class PurchaseService {
           created_at: Between(today.start, today.end),
           usuario_id: user_id
         },
+        relations: {
+          productos: true,
+        }
       });
       const total = await this.getTotalValuePurchase(purchase);
       return {data: purchase, total};
@@ -66,7 +83,7 @@ class PurchaseService {
       return purchase;
     }
     
-    private async createPurchaseValidation(purchase: PurchaseI) :Promise<Compras> {
+    private async createPurchaseValidation(purchase: PurchaseRequestI) :Promise<Compras> {
       const compra = new Compras
       compra.provedor = purchase.provedor
       compra.cantidad_total = purchase.cantidad_total

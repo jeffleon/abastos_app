@@ -20,8 +20,9 @@ class ProductsService {
 
     async lessProduct(product:ProductsI, item:SaleProductsI){ 
       product.inventario -= item.cantidad
-      if (product.inventario < 0) {
+      if (product.inventario <= 0) {
         product.inventario = 0;
+        product.precio_promedio = 0;
       }
       return product;
     }

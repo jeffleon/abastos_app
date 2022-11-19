@@ -1,10 +1,9 @@
-import { JsonController, Res, Body, Post, Header, Get, Put, Param, Authorized } from 'routing-controllers';
+import { JsonController, Res, Body, Post, Header, Get, Put, Param, Authorized, Delete } from 'routing-controllers';
 import { Service } from 'typedi';
 import { Response } from 'express';
 import PurchaseService from '../service/purchase';
 import { paymentI, PurchaseRequestI } from '../types/purchase';
 import ProductsService from '../service/products';
-import { ItemsIToProductsPurchase } from '../utils/cast';
 
 @JsonController(`${process.env.APIROOT}/user/:user_id/purchase`)
 @Header("Content-Type", "application/json")
@@ -16,10 +15,9 @@ export class PurchaseController {
     @Post('/')
     async post(@Body() purchase: PurchaseRequestI, @Res() response: Response) {
       try { 
-        const res = ItemsIToProductsPurchase(purchase);
-        const resp = await this._purchaseService.savePurchase(res);
+        const resp = await this._purchaseService.savePurchase(purchase);
         const products = await Promise.all(purchase.productos.map(async (element) => {
-          const product = await this._productsService.getProduct(element.id);
+          const product = await this._productsService.getProduct(element.producto_id);
           const resultProduct = await this._productsService.sumAvgProduct(product, element);
           await this._productsService.updateProduct(resultProduct.id, resultProduct);
           return resultProduct;
@@ -54,6 +52,16 @@ export class PurchaseController {
         purchase.valor_deuda -= payment.payment; 
         const resp = await this._purchaseService.updatePurchase(id, purchase);
         return response.status(200).json({data: resp});
+      } catch(error) {
+        return response.status(500).json({error: error});
+      }
+    }
+
+    @Delete('/:id')
+    async deletePurchase(@Param('id') id:number, @Res() response: Response) {
+      try {
+        const resp = await this._purchaseService.deletePurchase(id)
+        return response.status(200).json(resp);
       } catch(error) {
         return response.status(500).json({error: error});
       }

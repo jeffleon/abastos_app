@@ -1,7 +1,5 @@
 import { IsInt, IsString, MinLength } from "class-validator";
-import { Column, PrimaryGeneratedColumn, Entity, ManyToMany, JoinTable } from "typeorm";
-import { Compras } from "./purchase";
-import { Ventas } from "./sales";
+import { Column, PrimaryGeneratedColumn, Entity } from "typeorm";
 
 @Entity()
 export class Productos {
@@ -27,14 +25,6 @@ export class Productos {
     @Column({nullable: true})
     image_url: string
 
-    @ManyToMany(() => Compras, (compra) => compra.productos)
-    @JoinTable()
-    compras: Compras[]
-
-    @ManyToMany(() => Ventas, (venta) => venta.productos)
-    @JoinTable()
-    ventas: Ventas[]
-    
     @Column()
     usuario_id: number
 }

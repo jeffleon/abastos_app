@@ -14,7 +14,7 @@ export function ItemsIToProductsPurchase(req:PurchaseRequestI) {
     };
     req.productos.forEach((element) => {
         const product:ProductsI = {
-            id: element.id,
+            id: element.producto_id,
         }
         res.productos.push(product)
     });
@@ -32,7 +32,7 @@ export function ItemsIToProductsSale(sale: SaleRequestI) {
     };
     sale.productos.forEach((element) => {
         const product:ProductsI = {
-            id: element.id,
+            id: element.producto_id,
         }
         res.productos.push(product)
     });

@@ -2,19 +2,28 @@ import { Service } from 'typedi';
 import { Repositories } from '../config/db/config';
 import { Between  } from "typeorm";
 import { todayHelper } from '../utils/dates';
-import { SaleI } from '../types/sales';
+import { SaleI, SaleProductsI, SaleRequestI } from '../types/sales';
 import { Ventas } from '../models/sales';
 import { validate } from 'class-validator';
 
 @Service()
 class SaleService {
-    async saveSale(sale: SaleI):Promise<SaleI> {
+    async saveSale(sale: SaleRequestI):Promise<SaleI> {
       const validation = await this.createSaleValidation(sale);
       if (validation instanceof Error) {
         return validation
       }
       const product = await Repositories.Sales.save(sale);
+      const productWithSale = sale.productos.map((element)=>{
+        return {...element, venta: product}
+      })
+      await this.saveProductSales(productWithSale)
       return product;
+    }
+
+    async saveProductSales(productSales: SaleProductsI[]) {
+      const response = await Repositories.ProductSales.save(productSales)
+      return response
     }
 
     async getTotalValueSale(sales:Ventas[]) {
@@ -29,6 +38,9 @@ class SaleService {
           created_at: Between(today.start, today.end),
           usuario_id: user_id,
         },
+        relations: {
+          productos: true,
+        }
       });
       const total = await this.getTotalValueSale(sales);
       return {data:sales, total};
@@ -55,7 +67,7 @@ class SaleService {
       return sale;
     }
 
-    private async createSaleValidation(sale: SaleI) {
+    private async createSaleValidation(sale: SaleRequestI) {
       const venta = new Ventas
       venta.cantidad_total = sale.cantidad_total;
       venta.nombre = sale.nombre;

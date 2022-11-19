@@ -27,7 +27,8 @@ export interface PurchaseProductsI {
     cantidad: number
     valor_total: number
     valor_unitario: number
-    id: number
+    producto_id: number
+    compra?: PurchaseRequestI 
 }
 
 export interface paymentI {
