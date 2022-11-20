@@ -13,12 +13,25 @@ class SaleService {
       if (validation instanceof Error) {
         return validation
       }
-      const product = await Repositories.Sales.save(sale);
-      const productWithSale = sale.productos.map((element)=>{
-        return {...element, venta: product}
+      const productWithProfit = this.addProfit(sale);
+      const totalProfit = this.getTotalProfit(productWithProfit);
+      const product = await Repositories.Sales.save({...sale, ganancia_venta: totalProfit});
+      const productWithSale = productWithProfit.map((el)=> {
+        return {...el, venta: product}
       })
       await this.saveProductSales(productWithSale)
       return product;
+    }
+
+    getTotalProfit(products:SaleProductsI[]):number {
+      return products.reduce((el, act) => el + act.ganancia, 0)
+    }
+
+    addProfit(sale: SaleRequestI):SaleProductsI[] {
+      return sale.productos.map((el)=>{
+        const profit = el.cantidad * (el.valor_unitario - el.precio_promedio) 
+        return {...el, ganancia: profit};
+      });
     }
 
     async saveProductSales(productSales: SaleProductsI[]) {

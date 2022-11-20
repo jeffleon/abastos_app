@@ -27,7 +27,15 @@ export class ProductosVendidos {
 
     @IsInt()
     @Column()
+    precio_promedio: number
+    
+    @IsInt()
+    @Column()
     cantidad: number
+
+    @IsInt()
+    @Column()
+    ganancia: number
 
     @ManyToOne(() => Ventas, (ventas: Ventas) => ventas.productos)
     venta:Ventas

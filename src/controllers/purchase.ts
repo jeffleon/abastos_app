@@ -16,13 +16,12 @@ export class PurchaseController {
     async post(@Body() purchase: PurchaseRequestI, @Res() response: Response) {
       try { 
         const resp = await this._purchaseService.savePurchase(purchase);
-        const products = await Promise.all(purchase.productos.map(async (element) => {
+        await Promise.all(purchase.productos.map(async (element) => {
           const product = await this._productsService.getProduct(element.producto_id);
           const resultProduct = await this._productsService.sumAvgProduct(product, element);
           await this._productsService.updateProduct(resultProduct.id, resultProduct);
           return resultProduct;
         }));
-        resp.productos = products;
         return response.status(200).json({data: resp});
       } catch(error) {
         return response.status(500).json({error: error.message});

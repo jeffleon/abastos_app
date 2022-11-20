@@ -16,6 +16,7 @@ export interface SaleRequestI {
     telefono: string
     valor_total: number
     cantidad_total: number
+    ganancia_venta?: number
     productos: SaleProductsI[]
     usuario_id: number
 }
@@ -26,6 +27,8 @@ export interface SaleProductsI {
     cantidad: number
     valor_total: number
     valor_unitario: number
+    precio_promedio: number
+    ganancia?: number
     producto_id: number
     venta?:SaleRequestI
 }

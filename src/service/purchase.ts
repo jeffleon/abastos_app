@@ -42,6 +42,9 @@ class PurchaseService {
           valor_deuda: MoreThan(0),
           usuario_id: user_id
         },
+        relations: {
+          productos: true,
+        }
       });
       const total = await this.getTotalValuePurchase(debtPurchase);
       return {data: debtPurchase, total};

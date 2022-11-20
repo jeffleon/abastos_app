@@ -20,6 +20,9 @@ export class Ventas {
     @Column()
     valor_total: number
 
+    @Column()
+    ganancia_venta: number
+
     @IsInt()
     @Column()
     cantidad_total: number
