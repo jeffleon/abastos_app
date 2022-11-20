@@ -40,8 +40,11 @@ class SaleService {
     }
 
     async getTotalValueSale(sales:Ventas[]) {
-      const sumPurchaseToday = sales.reduce((prevVal, curVal) => prevVal + curVal.valor_total,0);
-      return sumPurchaseToday;
+      return sales.reduce((prevVal, curVal) => prevVal + curVal.valor_total,0);
+    } 
+
+    async getTotalProfitSale(sales:Ventas[]) { 
+      return sales.reduce((prevVal, curVal) => prevVal + curVal.ganancia_venta,0);
     } 
 
     async getSalesToday(user_id: number) {
@@ -56,7 +59,8 @@ class SaleService {
         }
       });
       const total = await this.getTotalValueSale(sales);
-      return {data:sales, total};
+      const totalProfit = await this.getTotalProfitSale(sales);
+      return {data:sales, total, ganancia_total: totalProfit};
     }
     
     async updateSale(id: number, data2Change: SaleI) {
