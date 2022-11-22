@@ -13,8 +13,9 @@ export class SalesController {
     constructor(public _saleService: SaleService, public _productsService: ProductsService) { }
 
     @Post('/')
-    async post(@Body() sale: SaleRequestI, @Res() response: Response) {
+    async post(@Param('user_id') user_id: number ,@Body() sale: SaleRequestI, @Res() response: Response) {
       try {
+        sale.usuario_id = user_id;
         const resp = await this._saleService.saveSale(sale);
         await Promise.all(sale.productos.map(async(element)=> {
           const product = await this._productsService.getProduct(element.producto_id);

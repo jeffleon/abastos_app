@@ -13,8 +13,9 @@ export class PurchaseController {
     constructor(public _purchaseService: PurchaseService, public _productsService: ProductsService) { }
 
     @Post('/')
-    async post(@Body() purchase: PurchaseRequestI, @Res() response: Response) {
-      try { 
+    async post(@Param('user_id') user_id: number , @Body() purchase: PurchaseRequestI, @Res() response: Response) {
+      try {
+        purchase.usuario_id = user_id; 
         const resp = await this._purchaseService.savePurchase(purchase);
         await Promise.all(purchase.productos.map(async (element) => {
           const product = await this._productsService.getProduct(element.producto_id);

@@ -19,7 +19,7 @@ export interface PurchaseRequestI {
     cantidad_total: number
     valor_deuda: number
     productos: PurchaseProductsI[]
-    usuario_id: number
+    usuario_id?: number
 }
 
 export interface PurchaseProductsI {

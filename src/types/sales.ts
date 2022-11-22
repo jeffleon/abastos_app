@@ -18,7 +18,7 @@ export interface SaleRequestI {
     cantidad_total: number
     ganancia_venta?: number
     productos: SaleProductsI[]
-    usuario_id: number
+    usuario_id?: number
 }
 
 
