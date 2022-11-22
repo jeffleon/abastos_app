@@ -2,7 +2,7 @@ import { ProductsI } from "./products"
 
 export interface PurchaseI {
     id?: number 
-    provedor: string
+    proveedor: string
     telefono: string
     valor_total: number
     cantidad_total: number
@@ -13,7 +13,7 @@ export interface PurchaseI {
 
 export interface PurchaseRequestI {
     id: number
-    provedor: string
+    proveedor: string
     telefono: string
     valor_total: number
     cantidad_total: number

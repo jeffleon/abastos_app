@@ -88,7 +88,7 @@ class PurchaseService {
     
     private async createPurchaseValidation(purchase: PurchaseRequestI) :Promise<Compras> {
       const compra = new Compras
-      compra.provedor = purchase.provedor
+      compra.proveedor = purchase.proveedor
       compra.cantidad_total = purchase.cantidad_total
       compra.valor_deuda = purchase.valor_deuda
       compra.valor_total = purchase.valor_total

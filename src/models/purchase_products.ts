@@ -1,11 +1,12 @@
 import { IsInt, IsNotEmpty, IsString, MinLength } from "class-validator";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Generated, ManyToOne, PrimaryColumn } from "typeorm";
 import { Compras } from "./purchase";
 
 @Entity()
 export class ProductosComprados {
     
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn({select: false})
+    @Generated("uuid")
     id: number
 
     @Column()

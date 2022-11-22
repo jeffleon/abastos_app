@@ -1,9 +1,10 @@
 import { IsInt, IsNotEmpty, IsString, MinLength } from "class-validator";
-import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn,UpdateDateColumn, OneToMany } from "typeorm";
+import { Column, Entity, CreateDateColumn,UpdateDateColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductosVendidos} from "./sale_products";
 
 @Entity()
 export class Ventas {
+    
     @PrimaryGeneratedColumn()
     id: number
 

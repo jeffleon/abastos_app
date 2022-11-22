@@ -11,7 +11,7 @@ export class Compras {
     @IsNotEmpty()
     @MinLength(2)
     @Column()
-    provedor: string
+    proveedor: string
 
     @Column({nullable: true})
     telefono: string

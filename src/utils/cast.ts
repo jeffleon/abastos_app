@@ -4,7 +4,7 @@ import { SaleI, SaleRequestI } from "../types/sales";
 
 export function ItemsIToProductsPurchase(req:PurchaseRequestI) {
     const res:PurchaseI = {
-        provedor: req.provedor,
+        proveedor: req.proveedor,
         telefono: req.telefono,
         valor_total: req.valor_total,
         cantidad_total: req.cantidad_total,
