@@ -1,38 +1,33 @@
-# name: Deploy master
-# on:
-#   push:
-#     branches:
-#     - main
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         node-version: [16.x]
-
-#     steps:
-
-#     - name: Checkout source code
-#       uses: actions/checkout@v2
-
-#     - name: Use Node.js ${{ matrix.node-version }}
-#       uses: actions/setup-node@v1
-#       with:
-#         node-version: ${{ matrix.node-version }}
-
-#     - name: Generate deployment package
-#       run: zip -r deploy.zip . -x '*.git*' -x node_modules/\* -x src/\*
-
-#     - name: Deploy to EB
-#       uses: einaregilsson/beanstalk-deploy@v20
-#       with:
-#         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         application_name: MyApplicationName
-#         environment_name: MyApplication-Environment
-#         version_label: 12345
-#         region: us-east-1
-#         deployment_package: deploy.zip
+name: Deploy master
+on:
+  push:
+    branches:
+    - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Generate deployment package
+      run: zip -r deploy.zip . -x '*.git*' -x node_modules/\* -x src/\*
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v20
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: abastosappp
+        environment_name: Abastosappp-env
+        version_label: 12345
+        region: us-east-1
+        deployment_package: deploy.zip
     
-#     - name: Deployed!
-#       run: echo App deployed to ELB
+    - name: Deployed!
+      run: echo App deployed to ELB
