@@ -29,7 +29,7 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: abastosappp
         environment_name: Abastosappp-env
-        version_label: 1.7
+        version_label: 1.8
         region: us-east-1
         deployment_package: deploy.zip
     
