@@ -21,17 +21,23 @@ jobs:
     - name: generate dist
       run: npm run build --if-present
     - name: Generate deployment package
-      run: zip -r deploy.zip . -x '*.git*' -x node_modules/\* -x src/\*
-    - name: Deploy to EB
-      uses: einaregilsson/beanstalk-deploy@v21
+      run: zip -r deploy_package.zip . -x '*.git*' -x node_modules/\* -x src/\*
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: abastosappp
-        environment_name: Abastosappp-env
-        version_label: 1.8
-        region: us-east-1
-        deployment_package: deploy.zip
-    
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: "us-east-1"
+    - name: Upload package to S3 bucket
+      run: aws s3 cp deploy_package.zip s3://elasticbeanstalk-us-east-1-559723227709/
+    - name: Create new ElasticBeanstalk Application Version
+      run: |
+        aws elasticbeanstalk create-application-version \
+        --application-name abastosappp \
+        --source-bundle S3Bucket="elasticbeanstalk-us-east-1-559723227709",S3Key="deploy_package.zip" \
+        --version-label "ver-${{ github.sha }}" \
+        --description "commit-sha-${{ github.sha }}"
+    - name: Deploy new ElasticBeanstalk Application Version
+      run: aws elasticbeanstalk update-environment --environment-name Abastosappp-env --version-label "ver-${{ github.sha }}"
     - name: Deployed!
       run: echo App deployed to ELB
