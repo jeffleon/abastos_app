@@ -20,6 +20,7 @@ const AppDataSource = new DataSource({
     logging: false,
 });
 
+
 const productsRepository = AppDataSource.getRepository(Productos);
 const usersRepository = AppDataSource.getRepository(Usuarios);
 const purchaseRepository = AppDataSource.getRepository(Compras);
