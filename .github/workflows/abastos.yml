@@ -3,6 +3,22 @@ on:
   push:
     branches:
     - main
+env:
+  PORT: 3000
+  HOSTNAME: http://localhost
+  APIROOT: /api/v1
+  DB_USER: root
+  DB_PASSWD: abastosadmin
+  DB_NAME: abastos
+  DB_PORT: 5432  
+  DB_TYPE: postgres
+  TOKEN_SECRET: AB@STOS_@PP
+  SALT_ROUNDS: 8
+  EXPIRE_TOKEN: 8h
+  MAGIC_WORD: Bearer
+  HEADER_JWT: authorization
+  DB_HOST: rds-abastos.chk9upbsd9cx.us-east-1.rds.amazonaws.com
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,6 +32,24 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: create .env file
+      run: |
+        touch .env
+        echo PORT=${PORT} > .env
+        echo HOSTNAME=${HOSTNAME} > .env
+        echo APIROOT=${APIROOT} > .env
+        echo DB_USER=${DB_USER} > .env
+        echo DB_PASSWD=${DB_PASSWD} > .env
+        echo DB_NAME=${DB_NAME} > .env
+        echo DB_PORT=${DB_PORT} > .env
+        echo DB_TYPE=${DB_TYPE} > .env
+        echo TOKEN_SECRET=${TOKEN_SECRET} > .env
+        echo SALT_ROUNDS=${SALT_ROUNDS} > .env
+        echo EXPIRE_TOKEN=${EXPIRE_TOKEN} > .env
+        echo MAGIC_WORD=${MAGIC_WORD} > .env
+        echo HEADER_JWT=${HEADER_JWT} > .env
+        echo DB_HOST=${DB_HOST} > .env
+        cat .env
     - name: npm install
       run: |
         npm ci
