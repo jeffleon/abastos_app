@@ -5,20 +5,19 @@ on:
     - main
 env:
   PORT: 3000
-  HOSTNAME: http://localhost
-  APIROOT: /api/v1
-  DB_USER: root
-  DB_PASSWD: abastosadmin
-  DB_NAME: abastos
-  DB_PORT: 5432  
-  DB_TYPE: postgres
-  TOKEN_SECRET: AB@STOS_@PP
+  HOSTNAME: 'http://localhost'
+  APIROOT: '/api/v1'
+  DB_USER: 'root'
+  DB_PASSWD: 'abastosadmin'
+  DB_NAME: 'abastos'
+  DB_PORT: '5432'  
+  DB_TYPE: 'postgres'
+  TOKEN_SECRET: 'AB@STOS_@PP'
   SALT_ROUNDS: 8
-  EXPIRE_TOKEN: 8h
-  MAGIC_WORD: Bearer
-  HEADER_JWT: authorization
-  DB_HOST: rds-abastos.chk9upbsd9cx.us-east-1.rds.amazonaws.com
-
+  EXPIRE_TOKEN: '8h'
+  MAGIC_WORD: 'Bearer'
+  HEADER_JWT: 'authorization'
+  DB_HOST: 'rds-abastos.chk9upbsd9cx.us-east-1.rds.amazonaws.com'
 jobs:
   build:
     runs-on: ubuntu-latest
